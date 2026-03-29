@@ -1,35 +1,35 @@
-export default async function TreePage({ params }: any) {
-  const { id } = await params;
+"use client";
 
-  const res = await fetch(
-    `http://localhost:3000/api/trees?id=${id}`,
-    { cache: "no-store" }
-  );
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-  const tree = await res.json();
+export default function TreePage() {
+  const params = useParams(); // ✅ correct way
+  const id = params?.id;
 
-  if (!tree) return <div style={{ padding: "20px" }}>Tree not found</div>;
+  const [tree, setTree] = useState<any>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`/api/trees?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => setTree(data));
+  }, [id]);
+
+  if (!tree) return <div style={{ padding: "20px" }}>Loading...</div>;
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial", color: "#fff" }}>
+    <div style={{ padding: "30px", color: "#fff" }}>
       <img
         src={tree.image_url}
-        style={{
-          width: "100%",
-          maxWidth: "500px",
-          borderRadius: "12px",
-        }}
+        style={{ width: "300px", borderRadius: "10px" }}
       />
 
-      <h1 style={{ color: "lightgreen" }}>{tree.botanical_name}</h1>
-      <h2>{tree.common_name}</h2>
-
-      <p><b>Family:</b> {tree.family_name}</p>
-      <p><b>Section:</b> {tree.section}</p>
-
-      <p style={{ marginTop: "10px" }}>
-        {tree.description}
-      </p>
+      <h1>{tree.common_name}</h1>
+      <h2 style={{ fontStyle: "italic" }}>{tree.botanical_name}</h2>
+      <h3>{tree.family_name}</h3>
+      <p>{tree.description}</p>
     </div>
   );
 }
