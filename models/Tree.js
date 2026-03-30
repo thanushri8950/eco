@@ -1,26 +1,12 @@
 import mongoose from "mongoose";
 
 const TreeSchema = new mongoose.Schema({
-  botanical_name: {
-    type: String,
-    required: true,
-  },
-  common_name: {
-    type: String,
-    required: true,
-  },
-  family_name: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  section: {
-    type: String,
-  },
-  image_url: {
-    type: String,
-  },
+  botanical_name: String,
+  common_name: String,
+  family_name: String,
+  description: String,
+  section: String,
+  image_url: String,
 });
 
 export default mongoose.models.Tree || mongoose.model("Tree", TreeSchema);
